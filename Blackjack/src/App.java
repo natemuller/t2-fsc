@@ -61,7 +61,15 @@ public class App {
         Scanner scanner = new Scanner(System.in);
         Random random = new Random(); 
 
-        System.out.println("Bem-vindo ao Blackjack!"); 
+        System.out.println("Vamos jogar Blackjack! Pressione 2 para nao ou digite qualquer numero para jogar:"); 
+        int escolhaJogar = scanner.nextInt();
+
+        if (escolhaJogar == 2) {
+            System.out.println("Obrigado por nao jogar!");
+            return;
+        }
+
+        System.out.println("Bem-vindo ao Blackjack!");
 
         int jogarNovamente = 1; 
 
@@ -86,11 +94,11 @@ public class App {
             maoDealer[numCartasDealer++] = compraCartas();
             pontosDealer = calculaPontuacaoMao(maoDealer, numCartasDealer); 
 
-            System.out.print("Sua mão: ");
+            System.out.print("Mao do jogador: ");
             exibeMao(maoJogador, numCartasJogador, false);
-            System.out.println("(Soma: " + pontosJogador + ")");
+            System.out.println("(Pontuacao: " + pontosJogador + ")");
 
-            System.out.print("Mão do Dealer: ");
+            System.out.print("Mao do Dealer: ");
             int[] maoDealerVisivel = {maoDealer[0], 0};
             System.out.print("[ ");
             System.out.print(maoDealer[0] == 1 ? "A " : (maoDealer[0] == 11 ? "J " : (maoDealer[0] == 12 ? "Q " : (maoDealer[0] == 13 ? "K " : maoDealer[0] + " "))));
@@ -101,8 +109,8 @@ public class App {
 
             while (!jogadorParou && !jogadorEstourou) {
                 System.out.println("\nO que você deseja fazer?"); 
-                System.out.println("1 - Pedir mais (Hit)"); 
-                System.out.println("2 - Parar (Stand)"); 
+                System.out.println("1 - Hit"); 
+                System.out.println("2 - Stand"); 
 
                 int escolhaJogador = scanner.nextInt();
 
@@ -112,53 +120,53 @@ public class App {
                         maoJogador[numCartasJogador++] = novaCarta;
                         pontosJogador = calculaPontuacaoMao(maoJogador, numCartasJogador);
 
-                        System.out.println("Você recebeu: " + (novaCarta == 1 ? "A" : (novaCarta == 11 ? "J" : (novaCarta == 12 ? "Q" : (novaCarta == 13 ? "K" : String.valueOf(novaCarta))))));
-                        System.out.print("Sua mão: ");
+                        System.out.println("Voce recebeu: " + (novaCarta == 1 ? "A" : (novaCarta == 11 ? "J" : (novaCarta == 12 ? "Q" : (novaCarta == 13 ? "K" : String.valueOf(novaCarta))))));
+                        System.out.print("Mao do jogador: ");
                         exibeMao(maoJogador, numCartasJogador, false);
-                        System.out.println("(Soma: " + pontosJogador + ")");
+                        System.out.println("(Pontuacao: " + pontosJogador + ")");
 
                         if (pontosJogador > 21) {
                             System.out.println("Estourou!");
                             jogadorEstourou = true;
                         }
                     } else {
-                        System.out.println("Sua mão está cheia, não pode receber mais cartas.");
+                        System.out.println("Mao do jogador esta cheia, nao pode receber mais cartas.");
                         jogadorParou = true; 
                     }
                 } else if (escolhaJogador == 2) {
                     jogadorParou = true;
-                    System.out.println("Você parou.");
+                    System.out.println("Jogador pediu Stand.");
                 } else {
-                    System.out.println("Opção inválida. Tente novamente.");
+                    System.out.println("Opcao invalida. Escolha a uma opcao existente.");
                 }
             }
 
             if (!jogadorEstourou) {
                 System.out.println("\nVez do Dealer!"); 
-                System.out.println("Dealer revela a carta oculta:");
+                System.out.println("Dealer revela a sua carta oculta:");
 
-                System.out.print("Mão do Dealer: ");
+                System.out.print("Mao do Dealer: ");
                 exibeMao(maoDealer, numCartasDealer, false);
-                System.out.println("(Soma: " + pontosDealer + ")");
+                System.out.println("(Pontuacao: " + pontosDealer + ")");
 
                 while (pontosDealer < 17) {
-                    System.out.println("Dealer precisa pedir (< 17)...");
+                    System.out.println("Dealer precisa pedir (< 17)");
                     if (numCartasDealer < MAX_CARTAS_MAO) {
                         int novaCartaDealer = compraCartas();
                         maoDealer[numCartasDealer++] = novaCartaDealer;
                         pontosDealer = calculaPontuacaoMao(maoDealer, numCartasDealer);
 
                         System.out.println("Dealer recebe: " + (novaCartaDealer == 1 ? "A" : (novaCartaDealer == 11 ? "J" : (novaCartaDealer == 12 ? "Q" : (novaCartaDealer == 13 ? "K" : String.valueOf(novaCartaDealer))))));
-                        System.out.print("Mão do Dealer: ");
+                        System.out.print("Mao do Dealer: ");
                         exibeMao(maoDealer, numCartasDealer, false);
-                        System.out.println("(Soma: " + pontosDealer + ")");
+                        System.out.println("(Pontuacao: " + pontosDealer + ")");
 
                         if (pontosDealer > 21) {
                             System.out.println("Estourou!");
                             break; 
                         }
                     } else {
-                        System.out.println("Mão do Dealer cheia.");
+                        System.out.println("Mao do Dealer cheia.");
                         break; 
                     }
                 }
@@ -167,29 +175,29 @@ public class App {
                 }
             }
 
-            System.out.println("\n--- Resultados Finais ---");
-            System.out.println("Sua Pontuação: " + pontosJogador);
-            System.out.println("Pontuação do Dealer: " + pontosDealer);
+            System.out.println("\nResultados Finais:");
+            System.out.println("Pontos do jogador: " + pontosJogador);
+            System.out.println("Pontos do Dealer: " + pontosDealer);
 
             if (jogadorEstourou) {
-                System.out.println("*** Dealer Venceu! (Você estourou) ***");
+                System.out.println("Dealer Venceu! (Você estourou)");
             } else if (pontosDealer > 21) {
-                System.out.println("*** Você Venceu! (Dealer estourou) ***");
+                System.out.println("Você Venceu! (Dealer estourou)");
             } else if (pontosJogador > pontosDealer) {
-                System.out.println("*** Você Venceu! ***");
+                System.out.println("Você Venceu!");
             } else if (pontosDealer > pontosJogador) {
-                System.out.println("*** Dealer Venceu! ***");
+                System.out.println("Dealer Venceu!");
             } else {
-                System.out.println("*** Empate! ***"); 
+                System.out.println("Empate!"); 
             }
 
-            System.out.println("\nDeseja jogar novamente? (1 - Sim, 2 - Não):");
+            System.out.println("\nDeseja jogar novamente? (1 - Sim, 2 - Nao):");
             jogarNovamente = scanner.nextInt();
 
             if (jogarNovamente == 2) {
                 System.out.println("Obrigado por jogar!"); 
             } else if (jogarNovamente != 1) {
-                System.out.println("Opção inválida. Assumindo 'Não'.");
+                System.out.println("Opcao invalida, obrigado por jogar!");
                 jogarNovamente = 2;
             }
         }
