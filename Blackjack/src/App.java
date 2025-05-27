@@ -119,7 +119,8 @@ public class App {
                         int novaCarta = compraCartas();
                         maoJogador[numCartasJogador++] = novaCarta;
                         pontosJogador = calculaPontuacaoMao(maoJogador, numCartasJogador);
-
+                        
+                        System.out.println("Jogador pediu Hit.");
                         System.out.println("Voce recebeu: " + (novaCarta == 1 ? "A" : (novaCarta == 11 ? "J" : (novaCarta == 12 ? "Q" : (novaCarta == 13 ? "K" : String.valueOf(novaCarta))))));
                         System.out.print("Mao do jogador: ");
                         exibeMao(maoJogador, numCartasJogador, false);
