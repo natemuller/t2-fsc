@@ -5,12 +5,12 @@ public class App {
 
     public static final int MAX_CARTAS_MAO = 10;
 
-    public static int compraCartas() {
-        Random random = new Random();
+    public static int compraCartas() {                      //VAI SER UTILIZADO O GERADOR DE NUMEROS ALEATORIOS PRESENTE NO RARS
+        Random random = new Random();                       //VIRANDO A FUNCAO sorteia_cartas
         return random.nextInt(13) + 1;
     }
 
-    public static int calculaPontuacaoMao(int[] mao, int numCartas) {
+    public static int calculaPontuacaoMao(int[] mao, int numCartas) {              //VAI VIRAR FUNCAO EM ASSEMBLY
         int pontosTotal = 0;
         int numAses = 0;
 
@@ -34,7 +34,7 @@ public class App {
         return pontosTotal;
     }
 
-    public static void exibeMao(int[] mao, int numCartas, boolean ocultaSegunda) {
+    public static void exibeMao(int[] mao, int numCartas, boolean ocultaSegunda) {           //VAI VIRAR FUNCAO exibr_cartas_iniciais
         System.out.print("[ ");
         for (int i = 0; i < numCartas; i++) {
             if (ocultaSegunda && i == 1) { 
@@ -78,21 +78,21 @@ public class App {
             System.out.println("\nNova Rodada!");
 
 
-            int[] maoJogador = new int[MAX_CARTAS_MAO];
-            int numCartasJogador = 0;
-            int pontosJogador = 0;
+            int[] maoJogador = new int[MAX_CARTAS_MAO];              
+            int numCartasJogador = 0;    //REG S2
+            int pontosJogador = 0;  // REG S0
 
             int[] maoDealer = new int[MAX_CARTAS_MAO];
-            int numCartasDealer = 0;
-            int pontosDealer = 0;
+            int numCartasDealer = 0;     // REG S3
+            int pontosDealer = 0;     // REG S1
 
             maoJogador[numCartasJogador++] = compraCartas();
             maoJogador[numCartasJogador++] = compraCartas();
-            pontosJogador = calculaPontuacaoMao(maoJogador, numCartasJogador);
+            pontosJogador = calculaPontuacaoMao(maoJogador, numCartasJogador);    //Este trecho vai se tornar a função vez_do_jogador
 
             maoDealer[numCartasDealer++] = compraCartas();
             maoDealer[numCartasDealer++] = compraCartas();
-            pontosDealer = calculaPontuacaoMao(maoDealer, numCartasDealer); 
+            pontosDealer = calculaPontuacaoMao(maoDealer, numCartasDealer);       //Este trecho vai se tornar a funcao vez_do_dealer
 
             System.out.print("Mao do jogador: ");
             exibeMao(maoJogador, numCartasJogador, false);
@@ -109,8 +109,8 @@ public class App {
 
             while (!jogadorParou && !jogadorEstourou) {
                 System.out.println("\nO que você deseja fazer?"); 
-                System.out.println("1 - Hit"); 
-                System.out.println("2 - Stand"); 
+                System.out.println("1 - Hit");       //Virará funcao hit
+                System.out.println("2 - Stand");     //Virará funcao stand
 
                 int escolhaJogador = scanner.nextInt();
 
@@ -123,8 +123,8 @@ public class App {
                         System.out.println("Voce recebeu: " + (novaCarta == 1 ? "A" : (novaCarta == 11 ? "J" : (novaCarta == 12 ? "Q" : (novaCarta == 13 ? "K" : String.valueOf(novaCarta))))));
                         System.out.print("Mao do jogador: ");
                         exibeMao(maoJogador, numCartasJogador, false);
-                        System.out.println("(Pontuacao: " + pontosJogador + ")");
-
+                        System.out.println("(Pontuacao: " + pontosJogador + ")");        //Cada carta extra comprada pelo jogador será armazenada
+                                                                                         //em registradores temporarios t0, t1...
                         if (pontosJogador > 21) {
                             System.out.println("Estourou!");
                             jogadorEstourou = true;
@@ -150,8 +150,8 @@ public class App {
                 System.out.println("(Pontuacao: " + pontosDealer + ")");
 
                 while (pontosDealer < 17) {
-                    System.out.println("Dealer precisa pedir (< 17)");
-                    if (numCartasDealer < MAX_CARTAS_MAO) {
+                    System.out.println("Dealer precisa pedir (< 17)");    //Se dealer precisar pedir mais uma carta, será armazenada em
+                    if (numCartasDealer < MAX_CARTAS_MAO) {                 //registradores temporários t0, t1...
                         int novaCartaDealer = compraCartas();
                         maoDealer[numCartasDealer++] = novaCartaDealer;
                         pontosDealer = calculaPontuacaoMao(maoDealer, numCartasDealer);
@@ -175,8 +175,8 @@ public class App {
                 }
             }
 
-            System.out.println("\nResultados Finais:");
-            System.out.println("Pontos do jogador: " + pontosJogador);
+            System.out.println("\nResultados Finais:");                        //Toda a parte que compara os resultados finais vai se tornar
+            System.out.println("Pontos do jogador: " + pontosJogador);           //uma função chamada determina_vencedor
             System.out.println("Pontos do Dealer: " + pontosDealer);
 
             if (jogadorEstourou) {
