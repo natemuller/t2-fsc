@@ -32,8 +32,10 @@ igual: .string "="
 nova_linha: .string "\n"
 
 # Vetores que armazenam as cartas
-mao_jogador: .space 40 # Limitamos em 10 cartas, 10 x 4 bytes/carta = 40 bytes
-mao_dealer: .space 40
+.align 2 # garantir alinhamento, tivemos muitos erros relacionados durante o desenvolvimento
+mao_jogador: .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 # 10 espaços de cartas
+.align 2
+mao_dealer: .word 0, 0, 0, 0, 0, 0, 0, 0, 0, 0
 
 # Contadores 
 num_cartas_jogador: .word 0
@@ -456,18 +458,20 @@ jogador_hit:
     la a2, num_cartas_jogador
     jal adicionarCartaNaMao
 
+    jal gerarCarta
+    mv t3, a0                  # SALVA A CARTA RECEM GERADA EM T3
+
+    # Adiciona à mão do jogador
+    mv a0, t3                  # Restaura a carta para a0 para a chamada da função
+    la a1, mao_jogador
+    la a2, num_cartas_jogador
+    jal adicionarCartaNaMao    # A carta t3 adicionada na mão e num_cartas_jogador atualizado
+
     la a0, jogador_recebe_carta_nova
     li a7, 4
     ecall
 
-    # Mostra a carta recebida
-    lw a1, num_cartas_jogador
-    addi a1, a1, -1  # Índice da última carta
-    slli t0, a1, 2
-    la t1, mao_jogador
-    add t1, t1, t0
-    lw a0, 0(t1)
-
+    mv a0, t3                  # EXIBE A CARTA SALVA EM T3 
     li a7, 1
     ecall
 
@@ -566,18 +570,20 @@ dealer_pede_hit:
     la a2, num_cartas_dealer
     jal adicionarCartaNaMao
 
+    jal gerarCarta
+    mv t3, a0                  # SALVA A CARTA RECEM GERADA EM T3
+
+    # Adiciona à mão do dealer
+    mv a0, t3                  # Restaura a carta para a0 para a chamada da função
+    la a1, mao_dealer
+    la a2, num_cartas_dealer
+    jal adicionarCartaNaMao    # A carta t3 adicionada à mão e num_cartas_dealer atualizado
+
     la a0, dealer_recebe_carta_nova
     li a7, 4
     ecall
 
-    # Mostra a carta recebida
-    lw a1, num_cartas_dealer
-    addi a1, a1, -1
-    slli t0, a1, 2
-    la t1, mao_dealer
-    add t1, t1, t0
-    lw a0, 0(t1)
-
+    mv a0, t3                  # EXIBE A CARTA SALVA EM T3
     li a7, 1
     ecall
 
